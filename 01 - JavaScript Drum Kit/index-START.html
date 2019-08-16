@@ -59,33 +59,42 @@
 
 <script>
 
-  // Start with an event listener on the window object for keys being pressed.
-
-  window.addEventListener("keydown", function(event){
+  // Start with a function that plays the corresponding audio
+  // when a key is pressed.
+  function playAudio(event){
     const audio = document.querySelector(`audio[data-key="${event.keyCode}"`);
       // Store the HTML audio element matching the key into a variable.
     const key = document.querySelector(`.key[data-key="${event.keyCode}"`)
       // Select the div with a class of key and the data-key of that key.
-    if(!audio) return; // Return if there is no audio for that key.
-    audio.currentTime = 0;
-      // Set the play for that sound to the beginning so I can spam a sound.
-    audio.play();
-    key.classList.add("playing");
-      // Add playing to the class list of that div element so we can
-      // see its animation.
-  });
+    if(audio) {
+      audio.currentTime = 0;
+        // Set the play for that sound to the beginning so I can spam a sound.
+      audio.play();
+      key.classList.add("playing");
+        // Add playing to the class list of that div element so we can
+        // see its animation.
+      };
+  }
 
-  const keys = document.querySelectorAll('.key');
-    // Grab a Node list for all the elements
-    // with the key class. This will be the divs.
+  // Since the CSS is written to run the transformation and not reset it
+  // to its original appearance, the JS will do that by removing the class
+  // that has the transformation when the 'transitionend' event triggers.
+  function removeTransition(event) {
+    if(event.propertyName === "transform") this.classList.remove("playing");
+  }
 
-  // At the end of the transition, the transitionend event triggers.
-  // I want this to then remove the playing class from that element.
-  keys.forEach(key => key.addEventListener("transitionend", function(event){
-    if(event.propertyName !== "transform") return;
-      // Do not affect properties without transform
-    this.classList.remove("playing")
-  }))
+  // Add an event listener on the window object with the playAudio function.
+  window.addEventListener("keydown", playAudio);
+
+  // At the end of the CSS transition, the 'transitionend' event triggers (obvs).
+  // I want this to then remove the 'playing' class from that element.
+
+  // Grab a Node list for all the elements with the key class.
+  // This will be the divs.
+  const keys = document.querySelectorAll(".key");
+
+  //Add an event listener to each of them that removes the relevant class from it
+  keys.forEach(key => key.addEventListener("transitionend", removeTransition))
 </script>
 
 
