@@ -26,24 +26,24 @@
 
     // Some and Every Checks
     // Array.prototype.some() // is at least one person 19 or older?
-    console.log("is at least one person 19 or older?", people.some(each => each.year <= 2000))
+    console.log("is at least one person 19 or older as of 2019?", people.some(each => each.year <= 2000))
     // Array.prototype.every() // is everyone 19 or older?
-    console.log("is everyone 19 or older?", people.every(each => each.year <= 2000))
+    console.log("is everyone 19 or older as of 2019?", people.every(each => each.year <= 2000))
 
     // Array.prototype.find()
     // Find is like filter, but instead returns just the one you are looking for
     // find the comment with the ID of 823423
-    console.table(comments.find(each => each.id===823423) || "not found")
+    console.table(comments.find(each => each.id === 823423) || "not found")
 
     // Array.prototype.findIndex()
     // Find the comment with this ID
     // delete the comment with the ID of 823423
-    console.log(comments)
-    console.log(comments.findIndex(each => each.id === 823423))
+    console.table(comments)
+    const commentIndex = comments.findIndex(each => each.id === 823423)
     console.log("deleting comment id# 823423")
-    const modifiedComments = comments.filter(each => each.id !== 823423)
-    console.log(modifiedComments)
-    console.log(modifiedComments.findIndex(each => each.id === 823423))
+    const modifiedComments = [...comments.slice(0, commentIndex), ...comments.slice(commentIndex + 1)]
+    console.table(modifiedComments)
+    console.log("Is comment 823423 still there?", modifiedComments.findIndex(each => each.id === 823423) > -1)
 
   </script>
 </body>

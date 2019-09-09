@@ -7,6 +7,60 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  const canvas = document.querySelector("#draw");
+  const context = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  context.lineJoin = "round";
+  context.lineCap = "round";
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  context.lineWidth = 50;
+  let direction = true;
+
+function draw(event) {
+  if(!isDrawing) return;
+  context.strokeStyle = `hsl(${hue}, 100%, 50%)`
+
+  context.beginPath();
+  context.moveTo(lastX, lastY);
+  context.lineTo(event.offsetX, event.offsetY);
+  context.stroke();
+  [lastX, lastY] = [event.offsetX, event.offsetY];
+
+  if(hue>360) {
+    hue -= 360
+    } else {
+      hue++
+      };
+
+  if (context.lineWidth >= 100 || context.lineWidth <= 10 || Math.random() > 0.8) direction = !direction;
+
+  direction ? context.lineWidth++ : context.lineWidth--;
+}
+
+canvas.addEventListener("mousedown", (event)=>{
+  isDrawing = true;
+  [lastX, lastY] = [event.offsetX, event.offsetY];
+  });
+
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", ()=>{
+  isDrawing = false;
+  context.lineWidth = (Math.ceil(Math.random() * 96) + 4);
+  hue = Math.floor(Math.random() * 360);
+});
+canvas.addEventListener("mouseout", ()=>{
+  isDrawing = false;
+  context.lineWidth = (Math.ceil(Math.random() * 96) + 4);
+  hue = Math.floor(Math.random() * 360);
+});
+
+
 </script>
 
 <style>
