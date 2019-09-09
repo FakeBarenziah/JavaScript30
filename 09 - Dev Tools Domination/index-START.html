@@ -18,28 +18,55 @@
     }
 
     // Regular
+    console.log("regular console log");
 
     // Interpolated
+    console.log("interpolate a variable called %s", "whatever");
 
     // Styled
+    console.log("%c I'm very excited to style console logs", "color: #029")
 
     // warning!
+    console.warn("warning");
 
     // Error :|
+    console.error("An error occured. Please change something.")
 
     // Info
+    console.info(String(new Date()))
 
     // Testing
+    console.assert(dogs.some(e => e.name.toLowerCase() === 'rex'), "No dogs named Rex found in the list. Please add him, he's a good boi.")
 
     // clearing
+    console.clear();
 
     // Viewing DOM Elements
+    console.dir(document.querySelector("p"));
+    console.clear("ok");
 
     // Grouping together
+    dogs.forEach(each => {
+      console.groupCollapsed(`${each.name}`);
+      console.log(`Meet ${each.name}.`);
+      console.log(`${each.name} is ${each.age} years old.`)
+      console.info(`That's ${each.age * 7} in dog years.`)
+      console.groupEnd(`${each.name}`);
+    });
+
+    console.clear();
 
     // counting
+    console.count(document.querySelector("p"))
 
     // timing
+    console.time("Fetching my GitHub data");
+    fetch('https://api.github.com/users/FakeBarenziah')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd("Fetching my GitHub data");
+        console.table(data)
+      })
 
   </script>
 </body>
