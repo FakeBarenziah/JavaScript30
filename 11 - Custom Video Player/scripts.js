@@ -39,7 +39,6 @@ function scrub(event) {
 // connect to event listeners
 
 let progressMouseDown = false;
-let rangesMouseDown = false;
 
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
