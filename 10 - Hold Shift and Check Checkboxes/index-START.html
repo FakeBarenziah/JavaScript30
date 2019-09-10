@@ -96,6 +96,28 @@
   </div>
 
 <script>
+  // Selecting the checkboxes
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+
+  let checkpoint;
+
+  function handleClick(event) {
+      let flag = false;
+
+      if (event.shiftKey && this.checked){
+        checkboxes.forEach(box => {
+          if(box === this || box === checkpoint){
+            flag = !flag;
+          };
+          if(flag) box.checked = true;
+        })
+      };
+      checkpoint = this;
+    }
+
+  checkboxes.forEach(each => {
+    each.addEventListener("click", handleClick)
+  })
 </script>
 </body>
 </html>
