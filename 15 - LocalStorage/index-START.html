@@ -28,8 +28,16 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
+
+  // Gets and parses into JSON anything in local storage with the clever name of "items"
   const items = JSON.parse(localStorage.getItem("items")) || [];
 
+/*
+addItem:
+Uses text from the input box to create an object with a "done" property that defaults to false.
+It adds it to the master array of items and repopulates the HTML element to include it.
+It then sets the localStorage to include the newly added item and resets the form.
+*/
 function addItem(event){
   event.preventDefault();
   const text = (this.querySelector("[name=item]")).value;
@@ -43,6 +51,10 @@ function addItem(event){
   this.reset()
 }
 
+/*
+populateList sets the inner HTML of an element to be a string of list items created from an array.
+Since the addItem event handler calls this with every addition, it's recommended to minimize impact from things like animations or network calls here for performance reasons.
+*/
 function populateList(inputList = [], destHTML){
   destHTML.innerHTML = inputList.map((each, idx) => {
     return `
@@ -53,6 +65,9 @@ function populateList(inputList = [], destHTML){
   }).join("")
 };
 
+/*
+toggleDone shows an example of event delegation in that the event listener is placed into the list parent element, and then the individual identity of the input element that was clicked is used to modify the data in memory and set the local storage.
+*/
 function toggleDone(event){
   if(!event.target.matches("input")) return;
   const id = event.target.dataset.index;
