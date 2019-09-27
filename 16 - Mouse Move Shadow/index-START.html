@@ -35,6 +35,47 @@
   </style>
 
 <script>
+  const hero = document.querySelector(".hero");
+  const text = hero.querySelector("h1");
+  const walk = 150;
+
+  const colorSet = ["rgba(200,30,150,0.75)","rgba(230,130,0,0.75)","rgba(50,150,240,0.75)","rgba(30,210,155,0.75)"];
+
+  let indicator = true;
+
+  function shadow(event){
+    const choiceOrder = [];
+    const {offsetWidth:width, offsetHeight: height} = hero;
+
+
+    let {offsetX : x, offsetY : y} = event;
+
+    if(this !== event.target){
+      x += event.target.offsetLeft;
+      y += event.target.offsetTop;
+    }
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / height * walk) - (walk / 2));
+
+    if(indicator){
+      const colorCards = [...colorSet];
+      for (let i = 4; i > 0; i--){
+        const cardIdx = Math.floor(Math.random() * colorCards.length);
+        choiceOrder.push(colorCards.splice(cardIdx, 1));
+      }
+    };
+
+    if(!choiceOrder.length) choiceOrder.push(...colorSet)
+
+    text.style.textShadow = `
+    ${xWalk}px ${yWalk * -1}px 0 ${choiceOrder[0]},
+    ${xWalk * -1}px ${yWalk}px 0 ${choiceOrder[1]},
+    ${yWalk}px ${xWalk * -1}px 0 ${choiceOrder[2]},
+    ${yWalk * -1}px ${xWalk}px 0 ${choiceOrder[3]}`
+  }
+
+  hero.addEventListener("mousemove", shadow)
+  window.addEventListener("click", ()=>{indicator = !indicator})
 </script>
 </body>
 </html>
