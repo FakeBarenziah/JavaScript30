@@ -31,11 +31,13 @@ function paintToCanvas() {
   return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
     let pixels = ctx.getImageData(0, 0, width, height);
-    // pixels = redEffect(pixels);
-    // pixels = rgbShift(pixels);
     // ctx.globalAlpha = 0.1;
     // pixels = rgbShift(pixels);
-    pixels = brighten(pixels);
+    // pixels = redEffect(pixels);
+    // pixels = brightness(pixels, 1.5);
+    // pixels = snow(pixels);
+    // pixels = negative(pixels);
+    // pixels = greenScreen(pixels);
     ctx.putImageData(pixels, 0, 0);
   }, 16);
 }
@@ -60,17 +62,49 @@ function takePhoto() {
 function redEffect(pixels) {
   for (let i = 0; i < pixels.data.length; i += 4) {
     pixels.data[i] += 180;
-    pixels.data[i + 1] -= 10;
+    pixels.data[i + 1] -= 50;
     pixels.data[i + 2] *= 0.5;
   }
   return pixels;
 }
 
-function brighten(pixels) {
+function brightness(pixels, multiplier) {
   for (let i = 0; i < pixels.data.length; i += 4) {
-    pixels.data[i] *= 1.8;
-    pixels.data[i + 1] *= 1.8;
-    pixels.data[i + 2] *= 1.8;
+    pixels.data[i] *= multiplier;
+    pixels.data[i + 1] *= multiplier;
+    pixels.data[i + 2] *= multiplier;
+  }
+  return pixels;
+}
+
+function snow(pixels) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    if (Math.ceil(Math.random() * 8) <= 3) {
+      pixels.data[i] = Math.floor(Math.random() * 225);
+      pixels.data[i + 1] = Math.floor(Math.random() * 225);
+      pixels.data[i + 2] = Math.floor(Math.random() * 225);
+    }
+  }
+  return pixels;
+}
+
+function negative(pixels) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    if (pixels.data[i] < 127) {
+      pixels.data[i] = 256 - pixels.data[i];
+    } else if (pixels.data[i] > 128) {
+      pixels.data[i] = 128 - (pixels.data[i] - 128);
+    }
+    if (pixels.data[i + 1] < 127) {
+      pixels.data[i + 1] = 256 - pixels.data[i + 1];
+    } else if (pixels.data[i + 1] > 128) {
+      pixels.data[i + 1] = 128 - (pixels.data[i + 1] - 128);
+    }
+    if (pixels.data[i + 2] < 127) {
+      pixels.data[i + 2] = 256 - pixels.data[i + 2];
+    } else if (pixels.data[i + 2] > 128) {
+      pixels.data[i + 2] = 128 - (pixels.data[i + 2] - 128);
+    }
   }
   return pixels;
 }
