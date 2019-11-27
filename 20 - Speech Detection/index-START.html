@@ -13,6 +13,41 @@
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 
+  // Firefox doesn't recognize the SpeechRecognition constructor
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+
+  let p = document.createElement("p");
+
+  const words = document.querySelector(".words");
+  words.appendChild(p);
+
+  const body = document.querySelector("body");
+
+  recognition.addEventListener("result", event => {
+    const transcript = Array.from(event.results)
+    .map(each => each[0].transcript)
+    .join("");
+
+    if(transcript.includes("background red")) body.style.backgroundColor = "#f00";
+    if(transcript.includes("background pink")) body.style.backgroundColor = "#f77";
+    if(transcript.includes("background blue")) body.style.backgroundColor = "#29f";
+    if(transcript.includes("background black")) body.style.backgroundColor = "#111";
+    if(transcript.includes("background yellow")) body.style.backgroundColor = "#fc0";
+    if(transcript.includes("sans-serif")) body.style.fontFamily = "sans-serif";
+
+    p.textContent = transcript;
+    if(event.results[0].isFinal){
+      p = document.createElement("p");
+      words.appendChild(p)
+    }
+    if(words.childNodes.length === 6) words.removeChild(words.childNodes[0])
+  })
+
+  recognition.start();
+
+  recognition.addEventListener("end", recognition.start)
+
 </script>
 
 
@@ -40,7 +75,7 @@
       position: relative;
       line-height: 3rem;
     }
-    
+
     p {
       margin: 0 0 3rem;
     }
