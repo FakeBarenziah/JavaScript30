@@ -22,7 +22,7 @@
       <label for="pitch">Pitch:</label>
 
       <input name="pitch" type="range" min="0" max="2" step="0.1">
-      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+      <textarea name="text"></textarea>
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
 
@@ -39,8 +39,9 @@
   const messageBox = document.querySelector('[name="text"');
   msg.text = messageBox.value;
 
-  const populateVoices = () => {
-    voices = speechSynthesis.getVoices()
+  const populateVoices = async () => {
+    const all = await speechSynthesis.getVoices();
+    voices = all.filter(e => e.lang.charAt(0) === "e" && e.lang.charAt(1) === "n")
     const voiceOptions = voices.map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`).join("");
     voicesDropdown.innerHTML = voiceOptions;
   }
