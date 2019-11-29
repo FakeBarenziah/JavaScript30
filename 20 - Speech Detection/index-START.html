@@ -13,11 +13,16 @@
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 
-  // Firefox doesn't recognize the SpeechRecognition constructor
+  /**
+   * Firefox doesn't recognize the SpeechRecognition constructor
+   * It only works in Chrome right now (2019)
+   */
   const recognition = new SpeechRecognition();
   recognition.interimResults = true;
 
   let p = document.createElement("p");
+
+  let warning = document.createElement("p");
 
   const words = document.querySelector(".words");
   words.appendChild(p);
@@ -35,6 +40,15 @@
     if(transcript.includes("background black")) body.style.backgroundColor = "#111";
     if(transcript.includes("background yellow")) body.style.backgroundColor = "#fc0";
     if(transcript.includes("sans-serif")) body.style.fontFamily = "sans-serif";
+    if(transcript.includes("original font")) body.style.fontFamily = "helvetica neue"
+    if(transcript.includes("cheese")) {
+      warning.textContent = "!!I love it!!"
+      words.appendChild(warning)
+    }
+    if(transcript.includes("f***") || transcript.includes("s***")) {
+      warning.textContent = "!!Please do not curse!!";
+      words.appendChild(warning)
+    }
 
     p.textContent = transcript;
     if(event.results[0].isFinal){
